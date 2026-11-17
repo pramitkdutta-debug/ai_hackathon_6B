@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Classify customer feedback, discover recurring themes, and export a decision-ready spreadsheet.">
+  <title>Feedback Board | Customer Voice Analytics</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Feedback Board home">
+        <span class="brand-mark">F</span>
+        <span>feedback<span class="brand-light">board</span></span>
+      </a>
+      <div class="topbar-right">
+        <span class="mode-pill"><span class="status-dot"></span><span id="modeLabel">Checking mode…</span></span>
+        <button id="sampleBtn" class="button button-quiet" type="button">Load sample data</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">CUSTOMER VOICE · LIVE ANALYSIS</p>
+          <h1>Understand what customers<br><span>really think.</span></h1>
+          <p class="hero-copy">Turn scattered reviews and support comments into a clear picture of customer sentiment and recurring themes.</p>
+        </div>
+        <div class="hero-note">
+          <span class="note-icon">✦</span>
+          <div><strong>From raw feedback to action</strong><small>Paste · Classify · Discover · Export</small></div>
+        </div>
+      </section>
+
+      <section class="input-panel panel">
+        <div class="section-heading">
+          <div><p class="eyebrow">01 / INPUT</p><h2>Bring in customer feedback</h2></div>
+          <span class="helper-tag">One comment per line</span>
+        </div>
+        <label class="sr-only" for="feedbackInput">Paste customer feedback, one comment per line</label>
+        <textarea id="feedbackInput" spellcheck="true" placeholder="Paste customer reviews, app-store comments, survey responses or social posts here…
+
+Example:
+The product is easy to use and delivery was quick.
+Customer support never replied to my ticket.
+Good quality, but the subscription is too expensive."></textarea>
+        <div class="input-footer">
+          <span id="charCount">0 characters · 0 comments</span>
+          <div class="input-actions">
+            <button id="clearBtn" class="button button-quiet" type="button">Clear</button>
+            <button id="analyzeBtn" class="button button-primary" type="button"><span>✦</span> Analyze feedback</button>
+          </div>
+        </div>
+        <p id="inputError" class="inline-error" role="alert"></p>
+      </section>
+
+      <section id="resultsSection" class="results-section" hidden>
+        <div class="results-heading">
+          <div><p class="eyebrow">02 / INSIGHTS</p><h2>Your customer pulse</h2><p id="resultMeta" class="muted"></p></div>
+          <button id="exportBtn" class="button button-outline" type="button"><span>↓</span> Export spreadsheet</button>
+        </div>
+
+        <div class="metric-grid">
+          <article class="metric-card health-card">
+            <div class="metric-top"><span>BRAND HEALTH SCORE</span><span class="metric-symbol">◉</span></div>
+            <div class="metric-value"><strong id="healthScore">—</strong><span>/ 100</span></div>
+            <div class="health-track"><span id="healthBar"></span></div>
+            <p id="healthCaption" class="metric-foot">Based on positive vs. negative feedback</p>
+          </article>
+          <article class="metric-card">
+            <div class="metric-top"><span>POSITIVE</span><span class="metric-symbol positive-text">↗</span></div>
+            <div class="metric-value"><strong id="positiveCount">0</strong><span>comments</span></div>
+            <p class="metric-foot" id="positivePct">0% of total feedback</p>
+          </article>
+          <article class="metric-card">
+            <div class="metric-top"><span>NEUTRAL</span><span class="metric-symbol neutral-text">—</span></div>
+            <div class="metric-value"><strong id="neutralCount">0</strong><span>comments</span></div>
+            <p class="metric-foot" id="neutralPct">0% of total feedback</p>
+          </article>
+          <article class="metric-card">
+            <div class="metric-top"><span>NEGATIVE</span><span class="metric-symbol negative-text">↘</span></div>
+            <div class="metric-value"><strong id="negativeCount">0</strong><span>comments</span></div>
+            <p class="metric-foot" id="negativePct">0% of total feedback</p>
+          </article>
+        </div>
+
+        <div class="insight-grid">
+          <article class="panel chart-panel">
+            <div class="section-heading compact"><div><p class="eyebrow">SENTIMENT MIX</p><h3>How customers feel</h3></div><span class="muted small" id="totalLabel"></span></div>
+            <div class="sentiment-bar" aria-label="Sentiment distribution"><span id="positiveBar"></span><span id="neutralBar"></span><span id="negativeBar"></span></div>
+            <div class="legend">
+              <span><i class="legend-dot positive-bg"></i>Positive <b id="positiveLegend">0%</b></span>
+              <span><i class="legend-dot neutral-bg"></i>Neutral <b id="neutralLegend">0%</b></span>
+              <span><i class="legend-dot negative-bg"></i>Negative <b id="negativeLegend">0%</b></span>
+            </div>
+          </article>
+          <article class="panel themes-panel">
+            <div class="section-heading compact"><div><p class="eyebrow">RECURRING TOPICS</p><h3>What customers mention</h3></div></div>
+            <div id="themeList" class="theme-list"><p class="muted">Themes will appear after analysis.</p></div>
+          </article>
+        </div>
+
+        <article class="panel table-panel">
+          <div class="section-heading table-heading">
+            <div><p class="eyebrow">03 / FEEDBACK EXPLORER</p><h3>Classified comments</h3></div>
+            <div class="table-tools">
+              <label class="sr-only" for="sentimentFilter">Filter by sentiment</label>
+              <select id="sentimentFilter"><option value="all">All sentiments</option><option value="positive">Positive</option><option value="neutral">Neutral</option><option value="negative">Negative</option></select>
+              <span id="rowCount" class="muted small"></span>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>COMMENT</th><th>SENTIMENT</th><th>KEY THEMES</th><th>CONFIDENCE</th></tr></thead>
+              <tbody id="feedbackTable"></tbody>
+            </table>
+          </div>
+          <p class="table-footnote">AI classifications are decision support, not a substitute for reading customer context. Confidence is an estimate, not a calibrated probability.</p>
+        </article>
+      </section>
+      <footer><span>FEEDBACK BOARD</span><span>Make every customer voice count.</span></footer>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
