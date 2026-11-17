@@ -1,0 +1,14 @@
+{
+  "name": "customer-feedback-sentiment-board",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser-based customer feedback sentiment and theme dashboard",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}
